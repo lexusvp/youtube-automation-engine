@@ -1,23 +1,31 @@
-# Social Automation Engine
+# YouTube Automation Engine
 
-Local-first, platform-neutral AI content automation. MVP starts with Meta (Facebook Page + Instagram) and keeps planning, moderation, approval, scheduling, publishing, and analytics separated.
+Local-first AI-assisted automation for planning, generating, approving, scheduling, publishing and analytics.
 
-## MVP flow
+## Status
 
-research -> plan -> draft -> moderation -> human approval -> schedule -> Meta adapter -> analytics
+**Prototype / production-readiness pass.** The core now validates configuration, guards publish inputs, validates timezone-aware schedules, retries transient YouTube API failures, provides a no-network dry-run command, and runs tests in GitHub Actions. Autonomous live publishing remains gated.
 
-AI creates drafts. **Humans approve final publishing.** Dry-run is the default.
+## Flow
+
+research -> plan -> AI draft -> moderation -> human approval -> schedule -> publish -> analytics
+
+AI creates drafts; humans approve final publishing.
 
 ## Structure
 
-- `src/models.py` — shared content state
-- `src/planner/` — platform-neutral planning
-- `src/moderation/` — policy checks and publish gate
-- `src/platforms/meta/` — Meta Graph API adapter
-- `src/analytics/` — analytics interfaces
-- `docs/ARCHITECTURE.md` — system boundaries and state machine
-- `docs/OPERATIONS.md` — secrets, dry-run and incident procedures
-- `.github/workflows/` — CI and scheduled Meta jobs
+- `src/ai.py` — AI package generation and deterministic fallback
+- `src/cli.py` — research, package and dry-run commands
+- `src/config.py` — validated environment configuration
+- `src/content.py` — queue and approval selection
+- `src/youtube.py` — OAuth upload, validation, scheduling and retries
+- `src/models.py`, `src/planner/`, `src/moderation/` — platform-neutral boundaries
+- `src/platforms/meta/` — Meta adapter
+- `src/analytics/` — analytics interface
+- `docs/ARCHITECTURE.md` — architecture
+- `docs/OPERATIONS.md` — operations
+- `docs/ISSUES.md` — prioritized production-readiness work
+- `.github/workflows/ci.yml` — test and CLI smoke gate
 
 ## Local setup
 
@@ -28,34 +36,30 @@ pip install -r requirements.txt
 cp .env.example .env
 pytest -q
 python -m src.cli research --count 5
+python -m src.cli package --topic "AI automation"
+python -m src.cli dry-run --topic "AI automation"
 ```
 
-## Secrets
+## Configuration
 
-Use local environment variables or GitHub Actions Secrets only. Never commit API keys, OAuth tokens or refresh tokens.
+Secrets belong in local `.env` or GitHub Actions Secrets only.
 
-Meta runtime secrets:
-- META_ACCESS_TOKEN
-- META_PAGE_ID
-- META_IG_USER_ID
-- META_GRAPH_VERSION (optional)
+YouTube:
+- `UPLOAD_PRIVACY=private|unlisted|public`
+- `VIDEO_CATEGORY` must be a positive integer
+- `SCHEDULED_PUBLICATION=false` by default
+- scheduled uploads require ISO-8601 timestamps with timezone
 
 AI:
-- OPENAI_API_KEY
-- OPENAI_MODEL (optional)
+- `OPENAI_API_KEY`
+- `OPENAI_MODEL`
 
-## GitHub schedules
+## CI
 
-- Weekly planning: Monday
-- Analytics pull: Tuesday
-- Publishing workflow: manual dispatch with dry-run enabled
+Every push and pull request runs pytest plus a no-network CLI smoke test.
 
-Live publishing should remain disabled until the Meta app, account permissions, token, and test post have been validated.
+## Production gate
 
-## Adding platforms
+Before autonomous live publishing: validate OAuth scopes and permissions, use a protected production environment, add persistent approval/audit state, and perform a staging/test publish.
 
-Implement `PlatformAdapter` under `src/platforms/<platform>`. Do not put platform-specific API calls into the planner or moderation service.
-
-## License
-
-MIT
+See `docs/ISSUES.md`.
