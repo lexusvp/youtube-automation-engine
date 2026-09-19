@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI-assisted workflow automation for content planning, moderation, approval, publishing and analytics.">
+  <title>Automation Engine — AI Workflow Automation</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="#top"><span class="brand-mark">AE</span> Automation Engine</a>
+    <nav>
+      <a href="#workflow">Workflow</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#security">Security</a>
+      <a class="nav-cta" href="#get-started">Get started</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">AI-ASSISTED WORKFLOW AUTOMATION</p>
+        <h1>Turn your content workflow into an <span>automation engine.</span></h1>
+        <p class="lead">Plan, generate, moderate, approve, schedule, publish and learn — with humans keeping the final say.</p>
+        <div class="actions">
+          <a class="button primary" href="#get-started">Explore the workflow</a>
+          <a class="button secondary" href="https://github.com/lexusvp/youtube-automation-engine">View on GitHub ↗</a>
+        </div>
+        <div class="proof"><span>●</span> Local-first &nbsp; <span>●</span> Dry-run by default &nbsp; <span>●</span> Human approval gate</div>
+      </div>
+      <div class="hero-card">
+        <div class="window-bar"><i></i><i></i><i></i><b>automation.yml</b></div>
+        <pre><code>research
+  ↓
+ai_plan
+  ↓
+draft
+  ↓
+moderate ──→ blocked
+  ↓
+human_approval
+  ↓
+schedule
+  ↓
+publish
+  ↓
+analytics
+  ↺</code></pre>
+      </div>
+    </section>
+
+    <section id="workflow" class="section">
+      <div class="section-heading"><p class="eyebrow">ONE SYSTEM</p><h2>From idea to insight.</h2><p>Keep every step visible, testable and replaceable.</p></div>
+      <div class="workflow-grid">
+        <article><span>01</span><h3>Research</h3><p>Collect signals and turn them into candidate topics.</p></article>
+        <article><span>02</span><h3>Plan & generate</h3><p>Create structured drafts, hooks, descriptions and packages with AI.</p></article>
+        <article><span>03</span><h3>Moderate</h3><p>Run deterministic policy checks before anything becomes publishable.</p></article>
+        <article><span>04</span><h3>Approve</h3><p>A human explicitly approves the final content before publishing.</p></article>
+        <article><span>05</span><h3>Publish</h3><p>Platform adapters handle scheduling and delivery without polluting the planner.</p></article>
+        <article><span>06</span><h3>Analyze</h3><p>Pull performance data back into the workflow for the next planning cycle.</p></article>
+      </div>
+    </section>
+
+    <section id="architecture" class="section dark">
+      <div class="section-heading"><p class="eyebrow">ARCHITECTURE</p><h2>Built as a platform, not a monolith.</h2><p>Each boundary can evolve independently.</p></div>
+      <div class="architecture">
+        <div class="stack"><strong>Brand & policy</strong><span>Voice · audience · guardrails</span></div>
+        <div class="arrow">↓</div>
+        <div class="stack"><strong>AI provider</strong><span>Planning · generation · structured output</span></div>
+        <div class="arrow">↓</div>
+        <div class="split"><div class="stack"><strong>Moderation</strong><span>Policy checks · QA</span></div><div class="stack"><strong>Approval</strong><span>Human decision · audit trail</span></div></div>
+        <div class="arrow">↓</div>
+        <div class="split"><div class="stack accent"><strong>Meta adapter</strong><span>Facebook Page · Instagram</span></div><div class="stack"><strong>Future adapters</strong><span>LinkedIn · X · TikTok · YouTube</span></div></div>
+      </div>
+    </section>
+
+    <section id="security" class="section">
+      <div class="security-card">
+        <div><p class="eyebrow">GUARDRAILS</p><h2>Automation without surrendering control.</h2></div>
+        <ul>
+          <li><b>Dry-run first</b><span>Production publishing stays disabled until integrations are validated.</span></li>
+          <li><b>Secrets stay out of Git</b><span>Use environment variables locally and GitHub Secrets in CI.</span></li>
+          <li><b>Approval is explicit</b><span>Moderation pass + human approval are both required to publish.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="get-started" class="section cta">
+      <p class="eyebrow">READY TO BUILD?</p>
+      <h2>Start with the workflow.<br>Scale the adapters later.</h2>
+      <p>The repository provides the foundation for an AI-assisted automation platform, starting with Meta and designed for more channels.</p>
+      <a class="button primary" href="https://github.com/lexusvp/youtube-automation-engine">Open the repository ↗</a>
+    </section>
+  </main>
+
+  <footer><span>Automation Engine</span><span>AI-assisted. Human-approved. Platform-ready.</span></footer>
+</body>
+</html>
