@@ -1,5 +1,1 @@
-from __future__ import annotations
-
-from typing import Any
-
-__all__ = ["settings"]
+"""SooJiDano YouTube automation engine."""
