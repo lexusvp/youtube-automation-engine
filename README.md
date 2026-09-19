@@ -1,50 +1,23 @@
-# youtube-automation-engine
+# Social Automation Engine
 
-A local-first YouTube automation engine for researching, scripting, metadata generation, publishing, and analytics feedback. It is designed to be developed locally, tested in a sandbox, and deployed to GitHub Actions for scheduled operation.
+Local-first, platform-neutral AI content automation. MVP starts with Meta (Facebook Page + Instagram) and keeps planning, moderation, approval, scheduling, publishing, and analytics separated.
 
-## Architecture
+## MVP flow
 
-```text
-research -> topic scoring -> script -> metadata -> thumbnail -> QA -> publish -> analytics
-```
+research -> plan -> draft -> moderation -> human approval -> schedule -> Meta adapter -> analytics
 
-## Repository layout
+AI creates drafts. **Humans approve final publishing.** Dry-run is the default.
 
-```text
-.
-├── .github/
-│   └── workflows/
-│       ├── ci.yml
-│       └── youtube-daily.yml
-├── src/
-│   ├── __init__.py
-│   ├── analytics/
-│   │   ├── __init__.py
-│   │   └── reporter.py
-│   ├── cli.py
-│   ├── config.py
-│   ├── content/
-│   │   ├── __init__.py
-│   │   └── script_builder.py
-│   ├── pipeline.py
-│   ├── research/
-│   │   ├── __init__.py
-│   │   └── idea_generator.py
-│   ├── video/
-│   │   ├── __init__.py
-│   │   └── media_pipeline.py
-│   └── youtube/
-│       ├── __init__.py
-│       └── client.py
-├── tests/
-│   ├── test_config.py
-│   └── test_pipeline.py
-├── .env.example
-├── .gitignore
-├── README.md
-├── requirements.txt
-└── .github/workflows/
-```
+## Structure
+
+- `src/models.py` — shared content state
+- `src/planner/` — platform-neutral planning
+- `src/moderation/` — policy checks and publish gate
+- `src/platforms/meta/` — Meta Graph API adapter
+- `src/analytics/` — analytics interfaces
+- `docs/ARCHITECTURE.md` — system boundaries and state machine
+- `docs/OPERATIONS.md` — secrets, dry-run and incident procedures
+- `.github/workflows/` — CI and scheduled Meta jobs
 
 ## Local setup
 
@@ -53,39 +26,35 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
-python -m src.cli research --topic "AI automation"
-python -m src.cli script --topic "AI automation"
-pytest
+pytest -q
+python -m src.cli research --count 5
 ```
 
-## Security model
+## Secrets
 
-Never commit real API keys to the repository. Keep them in a local `.env` file or in GitHub Secrets.
+Use local environment variables or GitHub Actions Secrets only. Never commit API keys, OAuth tokens or refresh tokens.
 
-Example variables:
+Meta runtime secrets:
+- META_ACCESS_TOKEN
+- META_PAGE_ID
+- META_IG_USER_ID
+- META_GRAPH_VERSION (optional)
 
-```bash
-APP_NAME=youtube-automation-engine
-ENVIRONMENT=development
-YOUTUBE_CLIENT_ID=
-YOUTUBE_CLIENT_SECRET=
-YOUTUBE_REFRESH_TOKEN=
-YOUTUBE_CHANNEL_ID=
-OPENAI_API_KEY=
-OPENAI_MODEL=gpt-4o-mini
-```
+AI:
+- OPENAI_API_KEY
+- OPENAI_MODEL (optional)
 
-## Typical workflow
+## GitHub schedules
 
-1. Research and score topic ideas
-2. Generate a script and thumbnail brief
-3. Run QA checks locally
-4. Publish through the YouTube API
-5. Pull analytics back into the content loop
+- Weekly planning: Monday
+- Analytics pull: Tuesday
+- Publishing workflow: manual dispatch with dry-run enabled
 
-## GitHub Actions
+Live publishing should remain disabled until the Meta app, account permissions, token, and test post have been validated.
 
-CI runs on push and pull request. A scheduled workflow is included for daily automation runs.
+## Adding platforms
+
+Implement `PlatformAdapter` under `src/platforms/<platform>`. Do not put platform-specific API calls into the planner or moderation service.
 
 ## License
 
